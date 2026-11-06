@@ -28,10 +28,29 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
+      - name: Set up Python for visual assets
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare static site and render PNG previews
+        run: |
+          python -m pip install --disable-pip-version-check 'CairoSVG>=2.7,<3'
+          mkdir -p site/assets
+          cp index.html site/index.html
+          cp assets/*.svg site/assets/
+          python - <<'PY'
+          from cairosvg import svg2png
+          svg2png(url='assets/social-preview.svg', write_to='site/assets/social-preview.png', output_width=1200, output_height=630)
+          svg2png(url='assets/favicon.svg', write_to='site/assets/favicon-32.png', output_width=32, output_height=32)
+          svg2png(url='assets/favicon.svg', write_to='site/assets/favicon-180.png', output_width=180, output_height=180)
+          PY
+          test -s site/assets/social-preview.png
+          test -s site/assets/favicon-32.png
+          test -s site/assets/favicon-180.png
       - name: Upload single-page website
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: site
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
