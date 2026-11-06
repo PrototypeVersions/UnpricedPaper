@@ -30,6 +30,7 @@
 <p>Each lab runs a $1,000 paper portfolio whose buying rules are fixed in advance and deliberately simple. They are a baseline, not the product. While the forecasting models learn, the buying rules stay still, so any change in results can be traced to the forecasts. Later, once enough live evidence exists, the project will test whether risk forecasts from the Risk Lab improve how the Stock Lab's picks are sized, and only then let the buying process itself learn, beginning with one narrow decision: when to replace a holding.</p>
 <p>The project therefore has three ambitions, and it helps to keep them apart. The scientific one is to find out, with evidence collected in real time, whether machine learning and AI can rank stocks and forecast risk reliably. The financial one is to turn forecasts that prove useful into better investment decisions, while testing separately whether the buying rules add value. The commercial one is to build infrastructure for developing, recording, comparing and independently grading financial forecasts that others may want to use. The third does not depend on the first two succeeding: its value need not disappear if the first trading strategies fail (Section 15).</p>
 <p>Nothing has been proven yet, and the paper says so. A realistic edge in stock ranking takes about one to two years of live evidence to confirm. What the project already has is a way of finding out that is built not to flatter itself. That is less common than it should be, and it is what makes the project worth watching.</p>
+</section>
 <section class="paper-section" id="section-1"><h2>1. The problem with AI and stock picking<a class="anchor" aria-label="Link to this section" href="#section-1">#</a></h2>
 <p>Prediction in markets is unusually easy to fake, even honestly. Six problems recur in academic work and in commercial products alike.</p>
 <h4>Backtests can be tuned until they look good</h4>
@@ -45,6 +46,7 @@
 <h4>A short winning streak proves little</h4>
 <p>Someone who gives an AI trading bot $100 and reports a profit may be telling the truth, but a few weeks of gains are well within what luck produces. What would count is a long, independently verifiable record that includes losses, costs, a benchmark and the strategies that were abandoned. The US Commodity Futures Trading Commission has warned the public about trading bots marketed with promises of AI-driven or guaranteed returns. That warning is about hype and fraud, not proof that every bot fails; the point is that the evidence usually offered cannot tell the difference.</p>
 <p>Unpriced is designed so that each of these six problems has a specific, checkable answer. Section 6 sets them side by side.</p>
+</section>
 <section class="paper-section" id="section-2"><h2>2. The design in one picture<a class="anchor" aria-label="Link to this section" href="#section-2">#</a></h2>
 <figure class="architecture" role="group" aria-label="Unpriced architecture: public data supplies the Stock Lab and Risk Lab, which send frozen forecasts to an independent grading Hub">
 <div class="data-source">Public data: Yahoo daily prices · Nasdaq symbol list · SEC EDGAR filings and XBRL fundamentals</div>
@@ -54,13 +56,13 @@
 <div class="cross-review" aria-hidden="true">↔<small>read-only review</small><small>later: risk to size stocks</small></div>
 <section class="lab-card risk"><h3>Risk Lab (UnpricedZ)</h3><p>Forecasts swings and falls for SPY + 9 sectors</p><p>EWMA, HAR, GARCH variance; drawdown odds</p><p>Registered protocol, independent live record</p><p>Frozen nightly before the open</p><p>Built and run by GPT</p><div class="portfolio-pill">$1,000 sector-ETF portfolio (fixed rules)</div></section></div>
 <div class="export-arrows" aria-hidden="true"><span>↘ <small>export: ranks</small></span><span><small>export: variance, fall odds</small> ↙</span></div>
-<div class="hub-card"><h3>Hub (UnpricedHub): the referee</h3><p>Saves its own copy and receipt time before the open</p><p>Grades matured forecasts with its own price download</p><p>Never edits a lab, never picks a model</p></div></figure>
-<figcaption>Figure 1. Both labs read public data, freeze forecasts every evening, and send them to the Hub, which grades them independently. The labs can read each other's records but cannot change them.</figcaption>
+<div class="hub-card"><h3>Hub (UnpricedHub): the referee</h3><p>Saves its own copy and receipt time before the open</p><p>Grades matured forecasts with its own price download</p><p>Never edits a lab, never picks a model</p></div><figcaption>Figure 1. Both labs read public data, freeze forecasts every evening, and send them to the Hub, which grades them independently. The labs can read each other's records but cannot change them.</figcaption></figure>
 <p>Each part exists to answer a different question, and each is deliberately limited.</p>
 <div class="table-wrap"><table><thead><tr><th scope="col">Site</th><th scope="col">Question it answers</th><th scope="col">What it is not allowed to do</th></tr></thead><tbody><tr><td data-label="Site">Stock Lab (UnpricedX)</td><td data-label="Question it answers">Which of about 1,000 US stocks will do better than the others over the next five trading days?</td><td data-label="What it is not allowed to do">Edit a frozen forecast, backfill a missed day, move its own gates or holdout to make a result pass.</td></tr>
 <tr><td data-label="Site">Risk Lab (UnpricedZ)</td><td data-label="Question it answers">How much will the market and each sector swing, and how likely is a fall of more than 3%, over the next five sessions?</td><td data-label="What it is not allowed to do">Promote a model on a short winning streak, rewrite its registered protocol, or build trading rules for the Stock Lab.</td></tr>
 <tr><td data-label="Site">Hub (UnpricedHub)</td><td data-label="Question it answers">Did each forecast really exist before the market opened, and how good was it, graded by someone other than its maker?</td><td data-label="What it is not allowed to do">Edit a lab, convert one kind of forecast into another, compare labs on different questions, or choose a model.</td></tr></tbody></table></div>
 <p>Splitting the project this way costs some convenience. It buys something more valuable: each claim on each site can be checked by a party that did not make it.</p>
+</section>
 <section class="paper-section" id="section-3"><h2>3. The Stock Lab (UnpricedX)<a class="anchor" aria-label="Link to this section" href="#section-3">#</a></h2>
 <h3 id="subsection-3-1">3.1 The question</h3>
 <p>Every trading evening the Stock Lab ranks roughly the 1,000 most-traded US stocks priced above $5 by how it expects each to perform over the next five trading days, from the next morning's opening price to the opening price five sessions later. It forecasts ranks, not prices. A rank asks which stocks will beat the others, so a market-wide rally or crash does not count as skill. This is the standard question in academic asset pricing, and it is the one where machine learning has the most published evidence (Gu, Kelly and Xiu found that trees and neural networks modestly but reliably outperformed linear methods at it).</p>
@@ -105,6 +107,7 @@
 <tr><td data-label="Page">Lab</td><td data-label="What it shows">Every experiment in the ledger, its development and holdout results, the trial count and the gates.</td><td data-label="Why it is there">Shows the failures as well as the successes, so the bar each idea cleared is visible.</td></tr>
 <tr><td data-label="Page">AI filings</td><td data-label="What it shows">Each reading with Claude's answer, the rule's answer and the quoted sentence; how the calls performed.</td><td data-label="Why it is there">A live test of whether a language model adds anything to the numbers.</td></tr>
 <tr><td data-label="Page">How it works</td><td data-label="What it shows">Methodology, schedule and data sources in plain language.</td><td data-label="Why it is there">So a reader can judge the method, not just the results.</td></tr></tbody></table></div>
+</section>
 <section class="paper-section" id="section-4"><h2>4. The Risk Lab (UnpricedZ)<a class="anchor" aria-label="Link to this section" href="#section-4">#</a></h2>
 <h3 id="subsection-4-1">4.1 The question</h3>
 <p>The Risk Lab forecasts risk rather than direction, for SPY and nine sector ETFs (materials, energy, financials, industrials, technology, staples, utilities, health care and consumer discretionary). Each evening it forecasts, for the next five sessions from the next open, the variance of returns (how much prices will swing) and the probability of a drawdown of more than 3% from a running peak.</p>
@@ -121,6 +124,7 @@
 <p>The Risk Lab also continues its original experiment, a sector-direction forecast with its own $1,000 sector-ETF paper portfolio. Its first review found no demonstrated edge over simple baselines, and a registered macroeconomic extension found no benefit. Those negative results stay on the site. That is the point: a lab that publishes what failed is one whose successes can be believed.</p>
 <h3 id="subsection-4-4">4.4 Why it is a separate lab</h3>
 <p>The Risk Lab answers a different question, with different assets, targets and scores. Merging it into the Stock Lab would mean one codebase, one set of habits and one builder checking its own work. Keeping it separate, built by a different AI system, gives the project two independent methods, an outside reviewer for each, and a clean way to combine them later (Section 9) without either contaminating the other's record. The cross-review has already paid for itself: GPT's review of the Stock Lab found a real look-ahead bug in its backtest portfolios (Section 11), and Claude's review of the Risk Lab produced checks on its drawdown definition and price adjustments.</p>
+</section>
 <section class="paper-section" id="section-5"><h2>5. The Hub (UnpricedHub)<a class="anchor" aria-label="Link to this section" href="#section-5">#</a></h2>
 <h3 id="subsection-5-1">5.1 Why a referee is needed</h3>
 <p>A lab that stores its own forecasts and grades its own results is asking to be trusted. Even with a hash chain, a lab could in principle re-run a day, publish late, or compute its score in a flattering way. The Hub makes those things much harder, and impossible to do quietly, by acting as a separate referee whose rules do not depend on which model or lab does well.</p>
@@ -138,6 +142,7 @@
 <p>As of November 5, the Hub held four receipts: the Stock Lab's first two forecasts, both received before the open, and the Risk Lab's first two, received after the open and therefore correctly marked late. The first Hub grades are due on the evening of November 12.</p>
 <h3 id="subsection-5-4">5.4 The Hub site</h3>
 <p>The site opens with the rules of the record in a few lines, then a panel for each lab showing forecasts received (on time, late or rejected), the latest receipts with their timestamps against the market open, and grades once forecasts mature. A final section explains exactly how each kind of forecast is graded, with links to the scoring code and the raw records.</p>
+</section>
 <section class="paper-section" id="section-6"><h2>6. How this differs from the usual approach<a class="anchor" aria-label="Link to this section" href="#section-6">#</a></h2>
 <p>The differences are not about cleverer models. The models used here are standard and well documented. The differences are about what is allowed to count as evidence. Serious academic studies and professional quant firms do many of these things; the left-hand column describes what is often seen in AI trading products and posts, not the best of the field. The individual techniques are not new. What is distinctive here is combining them, rigorous forecasting, independent assessment, public records and controlled experiments, in one evolving system that is open from the first day.</p>
 <div class="table-wrap"><table><thead><tr><th scope="col">Often seen</th><th scope="col">In Unpriced</th></tr></thead><tbody><tr><td data-label="Often seen">Results come from backtests built after the fact.</td><td data-label="In Unpriced">Only forecasts frozen before the open count. History is for discovering ideas, never for claiming success.</td></tr>
@@ -151,6 +156,7 @@
 <tr><td data-label="Often seen">Success is a headline return.</td><td data-label="In Unpriced">Success is a pre-stated test on live data, with a confidence band that stays valid however often it is checked.</td></tr>
 <tr><td data-label="Often seen">The AI is the decision-maker.</td><td data-label="In Unpriced">AI builds, maintains and reviews; fixed rules and live evidence decide.</td></tr></tbody></table></div>
 <p>One more difference is easy to miss. Many projects are optimized to produce an impressive result. This one is optimized to produce a believable result, whatever it turns out to be. If the answer after two years is that nothing beats a simple rule, that is a real finding, and the record will show it was reached fairly.</p>
+</section>
 <section class="paper-section" id="section-7"><h2>7. Forecasting and buying are kept apart<a class="anchor" aria-label="Link to this section" href="#section-7">#</a></h2>
 <h3 id="subsection-7-1">7.1 Why separate them</h3>
 <p>A trading result mixes two things: how good the forecast was and how good the rule for acting on it was. When both change at once, a good month cannot be attributed to either. Unpriced therefore treats them as separate experiments. The forecasts are graded on their own measures (ranking skill, QLIKE, Brier). The portfolios are graded on money, after costs, against SPY.</p>
@@ -161,6 +167,7 @@
 <h3 id="subsection-7-3">7.3 How buying will eventually learn</h3>
 <p>Once the forecasts have a live track record, the buying process can start to learn, one decision at a time, each tested the same way the forecasts are. The first decision should be when to replace a holding. Today a stock stays until it drops below rank 40. That threshold trades off two costs: holding a stock whose forecast has faded, and paying to trade too often. It is a single, well-defined choice, it can be studied on the frozen record, and its effect can be measured cleanly against the fixed rule. Later candidates are how many stocks to hold and how much to put in each, which is where the Risk Lab comes in.</p>
 <p>Each learned rule would run as a separate paper portfolio beside the fixed one, never replacing it until live evidence says so. The fixed portfolio continues indefinitely as the control.</p>
+</section>
 <section class="paper-section" id="section-8"><h2>8. The models and kinds of AI in use<a class="anchor" aria-label="Link to this section" href="#section-8">#</a></h2>
 <p>&quot;AI&quot; covers very different things in this project. It helps to name each one and its job.</p>
 <div class="table-wrap"><table><thead><tr><th scope="col">Kind</th><th scope="col">Where</th><th scope="col">Job</th><th scope="col">Limits on it</th></tr></thead><tbody><tr><td data-label="Kind">Classical statistics</td><td data-label="Where">Both labs, Hub</td><td data-label="Job">Rank correlations, Newey-West t-statistics, Bonferroni corrections, deflated Sharpe ratios, confidence sequences, QLIKE and Brier scores.</td><td data-label="Limits on it">Fixed formulas, written in tests.</td></tr>
@@ -170,6 +177,7 @@
 <tr><td data-label="Kind">Language model as a reader</td><td data-label="Where">Stock Lab</td><td data-label="Job">Claude Haiku 5.5 reads earnings releases for guidance changes.</td><td data-label="Limits on it">Live only, narrow question, keyword baseline, strict timing.</td></tr>
 <tr><td data-label="Kind">AI agents as engineers</td><td data-label="Where">Both labs</td><td data-label="Job">Claude and GPT write the code, run health checks, propose research and review each other.</td><td data-label="Limits on it">Cannot change records, gates or holdouts; changes go through tests and logs.</td></tr></tbody></table></div>
 <p>The last row is unusual. The AI systems that build this project do not decide what is true about it. They propose; the record and the fixed tests decide. That is a sensible division of labor for any project that uses AI: let it do the work, but do not let it grade the work.</p>
+</section>
 <section class="paper-section" id="section-9"><h2>9. Combining the two labs<a class="anchor" aria-label="Link to this section" href="#section-9">#</a></h2>
 <h3 id="subsection-9-1">9.1 The idea</h3>
 <p>A stock ranking says what to buy; a risk forecast says how much. A long line of research suggests that scaling exposure down when volatility is forecast to be high can improve risk-adjusted returns (Moreira and Muir, 2017), though later work found the benefit fragile out of sample (Cederburg and co-authors, 2020). That is exactly the kind of claim that should be tested live, with a simple alternative alongside it.</p>
@@ -185,6 +193,7 @@
 <p>The combined portfolios will live in the Stock Lab, which will only read the Risk Lab's published forecasts. The Risk Lab keeps forecasting risk and nothing else; the Hub keeps grading each lab's raw forecasts and nothing else. That preserves the independence of each record. The Risk Lab has already published its 2019–2024 out-of-sample variance forecasts as a read-only file for the historical part of this study, clearly labelled as a simulation rather than a live record.</p>
 <h3 id="subsection-9-4">9.4 When</h3>
 <p>The historical test comes first, in late November, using the Risk Lab's published history. If the rules look sound, the three live paper portfolios start in mid-to-late December. A first meaningful review is about February, and a firm conclusion will take longer.</p>
+</section>
 <section class="paper-section" id="section-10"><h2>10. Why things stay as they are for now<a class="anchor" aria-label="Link to this section" href="#section-10">#</a></h2>
 <p>The hardest discipline in this project is not changing it. Three reasons explain why.</p>
 <h4>The evidence takes time</h4>
@@ -194,6 +203,7 @@
 <h4>Bad weeks are expected</h4>
 <p>A real edge of 0.03 will still produce many losing weeks. Reacting to them is how most strategies end up fitted to noise. The project's rule is simple: no retuning because of a bad week, and no celebration because of a good one.</p>
 <p>What does change is the safe kind of work: bug fixes with tests (recorded in the decisions log, including whether live forecasts were affected), new ideas entering as trials, data improvements, and operational fixes when GitHub's scheduler runs late.</p>
+</section>
 <section class="paper-section" id="section-11"><h2>11. Where things stand on November 5, 2026<a class="anchor" aria-label="Link to this section" href="#section-11">#</a></h2>
 <div class="table-wrap"><table><thead><tr><th scope="col">Item</th><th scope="col">Status</th></tr></thead><tbody><tr><td data-label="Item">Stock Lab champion</td><td data-label="Status">&quot;ens_all&quot;, a blend of models, provisional: it was pre-registered as the default because no model has yet passed every gate.</td></tr>
 <tr><td data-label="Item">Champion on history</td><td data-label="Status">Development ranking skill 0.0156 (t = 3.67); holdout (2022 on) 0.0257 (t = 3.43). It failed the development cost gates: long-short net return was negative, so it is not yet a proven trading signal even on history.</td></tr>
@@ -205,6 +215,7 @@
 <tr><td data-label="Item">Hub</td><td data-label="Status">Four receipts (two on time, two correctly marked late); first grades November 12.</td></tr>
 <tr><td data-label="Item">AI reader</td><td data-label="Status">Switched on November 5; API key confirmed with a test read; first real readings tonight.</td></tr></tbody></table></div>
 <p>One correction made on November 5 shows the process working. GPT's review found that the Stock Lab's backtest portfolios dropped stocks whose exit price was missing before choosing holdings. In effect, they knew in advance which stocks would stop trading. The fix chooses holdings without that knowledge and counts a missing exit as a 0% return. The old results remain in the ledger, labelled with the older calculation; Saturday's sweep re-scores every idea under the corrected one; and the change is in the decisions log. The ranking scores the gates use were not affected, and neither were the live forecasts.</p>
+</section>
 <section class="paper-section" id="section-12"><h2>12. Roadmap<a class="anchor" aria-label="Link to this section" href="#section-12">#</a></h2>
 <div class="table-wrap"><table><thead><tr><th scope="col">When</th><th scope="col">What happens</th><th scope="col">What it tells us</th></tr></thead><tbody><tr><td data-label="When">Every weekday evening</td><td data-label="What happens">Both labs freeze forecasts; the Hub collects them several times before the open; an AI check restarts late runs.</td><td data-label="What it tells us">Whether the record is complete and on time.</td></tr>
 <tr><td data-label="When">Sat 7 Nov</td><td data-label="What happens">Weekly sweep: re-scores every idea with the corrected backtest, adds SEC data, starts the benchmark, retires the duplicate challenger.</td><td data-label="What it tells us">Whether the lab's history results change under the fix.</td></tr>
@@ -219,6 +230,7 @@
 <tr><td data-label="When">About May 2027</td><td data-label="What happens">26 weeks of live forecasts: the earliest point a challenger can replace the champion.</td><td data-label="What it tells us">The first possible live promotion.</td></tr>
 <tr><td data-label="When">Mid to late 2027</td><td data-label="What happens">Decide on a risk-monitoring dashboard if the Risk Lab's live forecasts are calibrated and at least match simple benchmarks.</td><td data-label="What it tells us">Whether the risk forecasts are good enough to offer to others.</td></tr>
 <tr><td data-label="When">Late 2027 onward</td><td data-label="What happens">A realistic edge becomes confirmable; the first learned buying rule (when to replace a holding) runs beside the fixed one.</td><td data-label="What it tells us">Whether the system has real skill, and whether buying can learn too.</td></tr></tbody></table></div>
+</section>
 <section class="paper-section" id="section-13"><h2>13. Limitations and risks<a class="anchor" aria-label="Link to this section" href="#section-13">#</a></h2>
 <p>A credible project is clear about what it cannot yet claim.</p>
 <ol class="paper-list">
@@ -232,10 +244,12 @@
 <li>AI builders make mistakes. The look-ahead bug in Section 11 was written by an AI and found by another. Cross-review, tests and append-only records limit the damage, but they do not make errors impossible.</li>
 <li>A language model can change. If the AI reader's model is changed, its record starts again rather than being mixed with the old one.</li>
 </ol>
+</section>
 <section class="paper-section" id="section-14"><h2>14. Why it is promising<a class="anchor" aria-label="Link to this section" href="#section-14">#</a></h2>
 <p>The promise of Unpriced is not a particular return. It is that whatever the project finds will have been found fairly, in a way others can check. Errors are still possible, and some have already been caught, but the record is built so that they are visible and correctable rather than hidden. Many attempts to apply AI to markets cannot say that, because their evidence was produced in a way that allowed them to fool themselves.</p>
 <p>This project has several things going for it beyond honesty. It forecasts the kinds of quantities where the research evidence is strongest: relative stock returns, where machine learning has shown modest but real gains, and volatility, which is genuinely predictable. It runs at a scale, roughly 1,000 stocks every day, where a small edge is detectable in a reasonable time. It tests the newest kind of AI, language models, in the only way that avoids their look-ahead problem. And it is structured to grow: new ideas, new data and new labs can be added without touching the existing record, and the Hub can referee them all.</p>
 <p>If, after a year or two, a model beats both chance and the simple benchmark, live and independently graded, that will be a rare and credible result. If nothing does, the project will have shown, in public, how hard the problem is, and that too is worth knowing. Either way, the record will be one that anyone can check.</p>
+</section>
 <section class="paper-section" id="section-15"><h2>15. Commercial value beyond trading returns<a class="anchor" aria-label="Link to this section" href="#section-15">#</a></h2>
 <p>Most AI trading projects have one way to succeed: the strategy makes money. If it stops, the project's value goes with it. Unpriced has several possible paths, because the infrastructure it is building to test its own forecasts honestly is scarce and useful to others. The table distinguishes the three ambitions from the summary by what success would look like and when it could be known.</p>
 <div class="table-wrap"><table><thead><tr><th scope="col">Ambition</th><th scope="col">Success would look like</th><th scope="col">What it needs</th><th scope="col">Earliest it could be known</th></tr></thead><tbody><tr><td data-label="Ambition">Scientific</td><td data-label="Success would look like">A model beats chance and the simple benchmark, live and independently graded.</td><td data-label="What it needs">Time: one to two years of live forecasts.</td><td data-label="Earliest it could be known">Late 2027 for a realistic edge.</td></tr>
@@ -262,6 +276,7 @@
 <h3 id="subsection-15-4">15.4 Recommended approach</h3>
 <p>Keep the research track exactly as planned, and start a second, commercial track cheaply and early. Demand for verification and education can be tested without waiting for a trading edge; anything sold as forecasts should wait for one. A sensible order is: publish the paper and the record now; after the first milestone and a few months of clean operation, add outside timestamping to the Hub and invite three to five outside forecasters to a free pilot; measure whether they keep submitting and whether they would pay; and decide only then. A risk dashboard follows if the Risk Lab's live forecasts prove calibrated. Stock analytics come last, if ever.</p>
 <p>The most valuable outcome might be a forecasting system that works. It might instead be the infrastructure that tells other people whether theirs does. The project is set up so that either is possible.</p>
+</section>
 <section class="paper-section" id="references"><h2>References<a class="anchor" aria-label="Link to this section" href="#references">#</a></h2>
 <p>Bailey, D. H. and López de Prado, M. (2014). The deflated Sharpe ratio: correcting for selection bias, backtest overfitting and non-normality. Journal of Portfolio Management, 40(5).</p>
 <p>Bollerslev, T. (1986). Generalized autoregressive conditional heteroskedasticity. Journal of Econometrics, 31(3).</p>
@@ -280,6 +295,7 @@
 <p>Patton, A. J. (2011). Volatility forecast comparison using imperfect volatility proxies. Journal of Econometrics, 160(1).</p>
 <p>Waudby-Smith, I., Arbour, D., Sinha, R., Kennedy, E. H. and Ramdas, A. (2024). Time-uniform central limit theory and asymptotic confidence sequences. Annals of Statistics.</p>
 <p>Project sources: the repositories PrototypeVersions/UnpricedX (README, docs/METHODOLOGY.md, docs/LEARNING.md, docs/DECISIONS.md), PrototypeVersions/UnpricedZ (README, docs/RISK_PROTOCOL.md, docs/RISK_FIRST_REVIEW_2026-11-04.md, docs/HISTORICAL_VARIANCE_EXPORT.md) and PrototypeVersions/UnpricedHub (README, docs/CONTRACT.md), as of November 5, 2026. Section 15 draws on a review of the first version of this paper by GPT, the Risk Lab's author.</p>
+</section>
 <section class="paper-section" id="glossary"><h2>Glossary<a class="anchor" aria-label="Link to this section" href="#glossary">#</a></h2>
 <p>Benchmark. A simple rule the models must beat; forecast and graded live but never put in charge.</p>
 <p>Brier score. Squared gap between a forecast probability and what happened (1 or 0), averaged. Lower is better; always saying 50% scores 0.25.</p>
@@ -290,4 +306,5 @@
 <p>Holdout. Recent history kept sealed while ideas are developed, then used for a limited number of logged checks.</p>
 <p>IC (information coefficient). The rank correlation between forecast ranks and actual returns. 0 is chance; 0.02–0.05 held over months is very good.</p>
 <p>QLIKE. A standard loss for variance forecasts; 0 is perfect, and underestimating risk costs more than overestimating it.</p>
-<p>Walk-forward. Train on the past, test on the next period, move forward, repeat, so no test uses data from its own future.</p><footer class="page-footer">Unpriced · Project paper · November 5, 2026 · Revised edition<br>Research and paper trading only. Nothing here is investment advice.</footer></main></body></html>
+<p>Walk-forward. Train on the past, test on the next period, move forward, repeat, so no test uses data from its own future.</p></section>
+<footer class="page-footer">Unpriced · Project paper · November 5, 2026 · Revised edition<br>Research and paper trading only. Nothing here is investment advice.</footer></main></body></html>
