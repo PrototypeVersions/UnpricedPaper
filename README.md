@@ -2,7 +2,7 @@
 
 This repository hosts the web edition of the Unpriced project paper: https://prototypeversions.github.io/UnpricedPaper/
 
-**Current version:** provisional revision, November 11, 2026. It narrows the November 5 paper (`UnpricedProjectPaper_v3.docx`) to the research itself: business possibilities are set aside, the record-keeping site (UnpricedHub) is described as a methods section, several claims are softened, and combining the Stock Lab and Risk Lab is presented as the first planned experiment. A fuller revision will follow the first graded results.
+**Current version:** provisional version, November 11, 2026. A fuller version will follow the first graded results.
 
 ## One source, two editions
 

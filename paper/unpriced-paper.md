@@ -2,11 +2,11 @@
 title: Unpriced
 subtitle: An open laboratory for market prediction
 tagline: Testing in public whether AI forecasts of stock returns and market risk lead to better decisions, and finding out without fooling ourselves
-date: Project paper · November 11, 2026 · provisional revision
+date: Project paper · November 11, 2026 · provisional version
 ---
 
 ::: {.provisional}
-**About this version.** This is a provisional revision of the November 5 paper, prepared for sharing while the live record is just beginning. It narrows the paper to the research itself: what the two labs forecast, how the forecasts are recorded and graded, and which experiments come next. Business possibilities are set aside for now. A fuller revision will follow once the first independently computed grades are in (due November 12–13, 2026).
+**About this version.** This is a provisional version of the paper, prepared for sharing while the live record is just beginning. A fuller version will follow once the first independently computed grades are in (due November 12–13, 2026).
 :::
 
 # At a glance {#at-a-glance}

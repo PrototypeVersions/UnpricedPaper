@@ -214,7 +214,7 @@ for (const b of ast.blocks) block(b);
 const doc = new Document({
   creator: "Unpriced",
   title: "Unpriced — An open laboratory for market prediction",
-  description: "Project paper, provisional revision, November 11, 2026",
+  description: "Project paper, provisional version, November 11, 2026",
   styles: {
     default: { document: { run: { font: BODY_FONT, size: 21, color: INK } } },
     paragraphStyles: [
@@ -235,7 +235,7 @@ const doc = new Document({
     properties: { page: { size: { width: 12240, height: 15840 }, margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 } }, titlePage: true },
     footers: {
       default: new Footer({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [
-        new TextRun({ text: "Unpriced · provisional revision · ", size: 16, color: MUTED }),
+        new TextRun({ text: "Unpriced · ", size: 16, color: MUTED }),
         new TextRun({ children: [PageNumber.CURRENT], size: 16, color: MUTED })] })] }),
       first: new Footer({ children: [new Paragraph({ children: [] })] }),
     },
