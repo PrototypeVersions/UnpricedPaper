@@ -1,18 +1,28 @@
 # Unpriced — An Open Laboratory for Market Prediction
 
-This repository hosts the **complete, single-page web edition** of the Unpriced project paper (revised November 5, 2026), based on `UnpricedProjectPaper_v3.docx`.
+This repository hosts the web edition of the Unpriced project paper: https://prototypeversions.github.io/UnpricedPaper/
 
-The full paper—including its 15 numbered sections, architecture figure, data tables, references, glossary, and methodology—is in [`index.html`](index.html). The page is responsive for desktop and mobile. Tables become readable stacked cards on narrow screens, and the architecture diagram rearranges vertically.
+**Current version:** provisional revision, November 11, 2026. It narrows the November 5 paper (`UnpricedProjectPaper_v3.docx`) to the research itself: business possibilities are set aside, the record-keeping site (UnpricedHub) is described as a methods section, several claims are softened, and combining the Stock Lab and Risk Lab is presented as the first planned experiment. A fuller revision will follow the first graded results.
 
-**Intended public URL:** https://prototypeversions.github.io/UnpricedPaper/
+## One source, two editions
 
-## Turn on GitHub Pages (one-time)
+| File | What it is |
+| --- | --- |
+| [`paper/unpriced-paper.md`](paper/unpriced-paper.md) | The paper's text. Edit this, not `index.html`. |
+| [`tools/build_site.py`](tools/build_site.py) | Builds `index.html` from the Markdown (needs pandoc 3 and BeautifulSoup 4). |
+| [`tools/build_docx.js`](tools/build_docx.js) | Builds the Word edition from the same Markdown (needs pandoc 3 and the `docx` npm package). |
+| [`tools/style.css`](tools/style.css) | The site's stylesheet. |
+| [`paper/figure-1.png`](paper/figure-1.png) | Figure 1 for the Word edition, captured from the web page. |
 
-The included [deployment workflow](.github/workflows/publish.yml) publishes the latest `main` branch automatically through GitHub Actions. GitHub requires the repository owner to enable Pages once:
+```
+python3 tools/build_site.py
+node tools/build_docx.js paper/figure-1.png UnpricedProjectPaper_v4.docx
+```
 
-1. Open **Settings → Pages** for this repository: https://github.com/PrototypeVersions/UnpricedPaper/settings/pages
-2. Under **Build and deployment**, choose **GitHub Actions** as the source.
-3. In the **Actions** tab, open **Publish Unpriced paper** and choose **Run workflow** (or push an update). The workflow will then deploy.
-4. Once the workflow succeeds, open https://prototypeversions.github.io/UnpricedPaper/.
+If the figure changes on the web page, recapture `paper/figure-1.png` from the rendered `figure.architecture` element before building the Word edition.
+
+## Publishing
+
+The [deployment workflow](.github/workflows/publish.yml) publishes `main` through GitHub Actions. Pages must be enabled once under **Settings → Pages → Build and deployment → GitHub Actions**.
 
 The document is research and paper trading only, not investment advice.
